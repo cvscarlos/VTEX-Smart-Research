@@ -1,0 +1,18 @@
+/* Extensão */
+.vtexSr-overlay{display:none; width:100%; height:100%; left:0; position:absolute; top:0; z-index:10; background:#FFF url("/arquivos/ajax-loader.gif") center center no-repeat;}
+
+/* Controles */
+.search-multiple-navigator{visibility:hidden;}
+
+/* Return to top */
+#returnToTop{display:none; position:fixed; bottom:100px; right:0; width:90px; padding:3px 0 0 4px; height:32px; background-color:#FFF; border-radius:4px 0 0 4px;}
+#returnToTop span{font-weight:bold; height:auto; line-height:12px; color:#AD2023;}
+#returnToTop .text{display:block;}
+#returnToTop .text2{float:left; font-size:18px; font-weight:normal;}
+#returnToTop .arrowToTop{background:url("/arquivos/returnToTop.png") no-repeat #AD2023; width:32px; height:32px; position:absolute; top:2px; right:0; display:block; float:right;}
+
+/* SCROLL INFINITO */
+#scrollLoading{border:#FFD324 solid 2px; margin:20px auto; line-height:20px; padding:5px; width:100px; background:url("/arquivos/ajax-loader2.gif") no-repeat right center #FFF6BF;}
+
+/* Chilli Beans */
+.resultItemsWrapper{position:relative;}
