@@ -2,9 +2,9 @@
 *	Pesquisa Inteligente
 *	@description Execurar buscas sem recarregar a página
 *	@author Carlos Vinicius
-*	@contributor Edson Domingos Júnior
-*	@version 3.9
-*	@date 2012-10-22
+*	@author Edson Domingos Júnior
+*	@version 3.8
+*	@date 2012-10-01
 */
 "function"!==typeof String.prototype.replaceSpecialChars&&(String.prototype.replaceSpecialChars=function(){var b={"\u00e7":"c","\u00e6":"ae","\u0153":"oe","\u00e1":"a","\u00e9":"e","\u00ed":"i","\u00f3":"o","\u00fa":"u","\u00e0":"a","\u00e8":"e","\u00ec":"i","\u00f2":"o","\u00f9":"u","\u00e4":"a","\u00eb":"e","\u00ef":"i","\u00f6":"o","\u00fc":"u","\u00ff":"y","\u00e2":"a","\u00ea":"e","\u00ee":"i","\u00f4":"o","\u00fb":"u","\u00e5":"a","\u00e3":"a","\u00f8":"o","\u00f5":"o",u:"u","\u00c1":"A","\u00c9":"E","\u00cd":"I","\u00d3":"O","\u00da":"U","\u00ca":"E","\u00d4":"O","\u00dc":"U","\u00c3":"A","\u00d5":"O","\u00c0":"A","\u00c7":"C"};return this.replace(/[\u00e0-\u00fa]/g,function(a){return"undefined"!=typeof b[a]?b[a]:a})});
 "function"!==typeof String.prototype.trim&&(String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"")});
@@ -42,7 +42,7 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			return (shelfOffset.top-20);
 		},
 		callback:function(){},
-		// Cálculo do tamanho do conteúdo/vitrine para que uma nova página seja chamada antes do usuário chegar ao "final" do site
+		// Cálculo do tamanho do footer para que uam nova página seja chamada antes do usuário chegar ao "final" do site
 		getShelfHeight:function(container)
 		{
 			return (container.scrollTop()+container.height());
@@ -145,7 +145,7 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			var elementPages,pages,currentStatus,tmp;
 
 			elementPages=body.find(".pager:first").attr("id");
-			tmp=(elementPages||"").split("_").pop();
+			tmp=elementPages.split("_").pop();
 			pages=(null!==options.pageLimit)?options.pageLimit:window["pagecount_"+tmp];
 			currentStatus=true;
 			
@@ -188,7 +188,7 @@ jQuery.fn.vtexSmartResearch=function(opts)
 					return false;
 			});
 		}
-	};
+	}
 	
 	if(null!==options.searchUrl)
 		currentSearchUrl=searchUrl=options.searchUrl;
@@ -465,46 +465,3 @@ jQuery.fn.vtexSmartResearch=function(opts)
 	// Exibindo o menu
 	filtersMenuE.css("visibility","visible");
 };
-
-
-$(function(){
-	var opts={
-		emptySearchMsg:'<div class="noFilterResults"><div class="ico-noFilterResults"></div><p>N\u00e3o encontramos produtos que atenda a todos os filtros escolhidos.</p><span>DICA: Use combina\u00e7\u00f5es de filtros diferentes ou seja menos espec\u00edfico nas sele\u00e7\u00f5es.</span></div>',
-		shelfCallback: function() {
-			$(".quickViewLink").vtexPopUp2();
-		}
-	};
-
-	if($("body").hasClass("home"))
-	{
-		$(".menuLeft .search-multiple-navigator input[type='checkbox']").vtexSmartResearch({
-			emptySearchMsg:opts.emptySearchMsg,
-			searchUrl:"/buscapagina?PS=16&sl=ef3fcb99-de72-4251-aa57-71fe5b6e149f &cc=4&sm=0&PageNumber=",
-			loadContent:".search_results",
-			shelfCallback: function() {
-				$(".quickViewLink").vtexPopUp2();
-			},
-			ajaxCallback:function(obj)
-			{
-				if(obj.filters>0 && false===obj.isEmpty)
-				{
-					$(".search_results").removeAttr("style");
-				}
-				else
-				{
-					$(".search_results").css({"position":"absolute","left":"-9999em"}).children().slideUp(600);
-				}
-			},
-			authorizeScroll:function(obj)
-			{
-				return (obj.filters>0)?true:false;
-			},
-			getShelfHeight:function(container)
-			{
-				return (container.offset().top+container.height());
-			}
-		});
-	}
-	else
-		$(".menuLeft .search-multiple-navigator input[type='checkbox']").vtexSmartResearch(opts);
-});
