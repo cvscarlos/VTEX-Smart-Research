@@ -28,7 +28,7 @@ $(".menuLateral input[type='checkbox']").vtexSmartResearch();
 
 Configurações completas do plugin (lista atualizada em 07/11/2012):
 ```javascript
-{
+$(".menuLateral input[type='checkbox']").vtexSmartResearch({
 	pageLimit:null, // Número máximo de páginas que o script irá retornar. Exemplo "pageLimit=3" só será retornado resultados até a terceira página
 	loadContent:".prateleira[id^=ResultItems]", // Elemento que esta em volta da(s) prateleira(s) de produtos.
 	shelfClass:".prateleira", // Pratelira de produtos (filha do elemento definido de um "loadContent")
@@ -73,5 +73,5 @@ Configurações completas do plugin (lista atualizada em 07/11/2012):
 	authorizeUpdate:function(){return true;},
 	// Callback de cada laço percorrendo os fildsets e os labels. Retorna um objeto com algumas informações
 	labelCallback:function(data){}
-};
+});
 ```
