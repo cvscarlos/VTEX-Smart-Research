@@ -19,20 +19,20 @@ jQuery.fn.vtexSmartResearch=function(opts)
 	
     var defaults=
 	{
-		pageLimit:null, // Número máximo de páginas (limite da paginação)
+		pageLimit:null, // Número máximo de páginas que o script irá retornar. Exemplo "pageLimit=3" só será retornado resultados até a terceira página
 		loadContent:".prateleira[id^=ResultItems]", // Elemento que esta em volta da(s) prateleira(s) de produtos.
-		shelfClass:".prateleira", // Pratelira de produtos (filha de "loadContent")
+		shelfClass:".prateleira", // Pratelira de produtos (filha do elemento definido de um "loadContent")
 		filtersMenu:".search-multiple-navigator", // Menu com os filtros
 		linksMenu:".search-single-navigator", // Menu de links
 		menuDepartament:".navigation .menu-departamento", // seletor do menu da página de departamentos
-		insertMenuAfter:".search-multiple-navigator h3:first", // O menu de departamento será inserido após este elemento
-		emptySearchElem:jQuery('<div class="vtexsr-emptySearch"></div>'), // Elemento Html (em Objeto jQuery) da busca vazia
+		mergeMenu:true, // Define se o menu de links será mesclado com o de filtros será mesclado na página de departamento
+		insertMenuAfter:".search-multiple-navigator h3:first", // O menu de links será inserido após este elemento
+		emptySearchElem:jQuery('<div class="vtexsr-emptySearch"></div>'), // Elemento Html (em Objeto jQuery) no qual será adicionado a mensagem de busca vazia
 		elemLoading:'<div id="scrollLoading">Carregando ... </div>', // Elemento com mensagem de carregando ao iniciar a requisição da página seguinte
-		returnTopText:'<span class="text">voltar ao</span><span class="text2">TOPO</span>', // Texto a ser inserido
-		emptySearchMsg:'<h3>Esta combinação de filtros não retornou nenhum resultado!</h3>', // Html para quando a busca retornar vazia
-		filterErrorMsg:"Houve um erro ao tentar filtrar a página!", // Mensagem de erro
+		returnTopText:'<span class="text">voltar ao</span><span class="text2">TOPO</span>', // Mensagem de "retornar ao topo"
+		emptySearchMsg:'<h3>Esta combinação de filtros não retornou nenhum resultado!</h3>', // Html com a mensagem para ser apresentada quando não existirem resultados para os filtros selecionados
+		filterErrorMsg:"Houve um erro ao tentar filtrar a página!", // Mensagem de erro exibida quando existe algum erro de servidor ao aplicar os filtros
 		searchUrl:null, // Url da página de busca (opicional)
-		mergeMenu:true, // Definição se o menu será mesclado na página de departamento
 		usePopup:false, // Opção p/ definir se deseja que a mensagem de não localizado seja exibida em um popup
 		showLinks:true, // Exibe o menu de links caso o de filtro não seja encontrado
 		popupAutoCloseSeconds:3, // Caso esteja utilizando popup, defina aqui o tempo para que ele feche automaticamente
