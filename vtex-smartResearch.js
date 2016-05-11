@@ -11,12 +11,12 @@
 jQuery.fn.vtexSmartResearch=function(opts)
 {
 	$this=jQuery(this);
-	
+
 	var log=function(msg,type){
 		if(typeof console=="object")
 			console.log("[Smart Research - "+(type||"Erro")+"] "+msg);
 	};
-	
+
     var defaults=
 	{
 		pageLimit:null, // Número máximo de páginas que o script irá retornar. Exemplo "pageLimit=3" só será retornado resultados até a terceira página
@@ -50,21 +50,21 @@ jQuery.fn.vtexSmartResearch=function(opts)
 		// Callback após inserir a prateleira na página
 		shelfCallback:function(){},
 		// Callback em cada requisição Ajax (Para requisições feitas com sucesso)
-		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados 
+		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados
 		ajaxCallback:function(){},
 		// Função que é executada quando a seleção de filtros não retorna nenhum resultado
-		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados 
+		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados
 		emptySearchCallback:function(){},
 		// Função para permitir ou não que a rolagem infinita execute na página esta deve retornar "true" ou "false"
-		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados 
+		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados
 		authorizeScroll:function(){return true;},
 		// Função para permitir ou não que o conteúdo de "loadContent" seja atualizado. Esta deve retornar "true" ou "false"
-		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados 
+		// Recebe como parâmetro um objeto contendo a quantidade total de requisições feitas e a quantidade de filtros selecionados
 		authorizeUpdate:function(){return true;},
 		// Callback de cada laço percorrendo os fildsets e os labels. Retorna um objeto com algumas informações
 		labelCallback:function(data){}
 	};
-	
+
     var options=jQuery.extend(defaults, opts),
 		_console="object"===typeof(console),
 		$empty=jQuery(""),
@@ -118,13 +118,13 @@ jQuery.fn.vtexSmartResearch=function(opts)
 		scrollToTop:function()
 		{
 			var elem=body.find("#returnToTop");
-			
+
 			if(elem.length<1)
 			{
 				elem=jQuery('<div id="returnToTop"><a href="#">'+options.returnTopText+'<span class="arrowToTop"></span></a></div>');
 				body.append(elem);
 			}
-			
+
 			var windowH=_window.height();
 			_window.bind("resize",function(){
 				windowH=_window.height();
@@ -148,13 +148,13 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			tmp=(elementPages||"").split("_").pop();
 			pages=(null!==options.pageLimit)?options.pageLimit:window["pagecount_"+tmp];
 			currentStatus=true;
-			
+
 			// Reportando erros
 			// if("undefined"===typeof pages) log("Não foi possível localizar quantidade de páginas.\n Tente adicionar o .js ao final da página. \n[Método: infinitScroll]");
-			
+
 			if("undefined"===typeof pages)
 				pages=99999999;
-				
+
 			_window.bind('scroll',function(){
 				var _this=jQuery(this);
 				if(!animatingFilter && currentPage<=pages && moreResults && options.authorizeScroll(ajaxCallbackObj))
@@ -189,12 +189,12 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			});
 		}
 	};
-	
+
 	if(null!==options.searchUrl)
 		currentSearchUrl=searchUrl=options.searchUrl;
 	else
 		currentSearchUrl=searchUrl=fn.getSearchUrl();
-	
+
 	// Reporting Errors
 	if($this.length<1)
 	{
@@ -217,10 +217,10 @@ jQuery.fn.vtexSmartResearch=function(opts)
 		pageNumber=1,
 		shelfJqxhr=null,
 		pageJqxhr=null;
-	
+
 	options.emptySearchElem.append(options.emptySearchMsg);
 	loadContentE.before(prodOverlay);
-	
+
 	var fns=
 	{
 		exec:function()
@@ -230,18 +230,18 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			$this.each(function(){
 				var _this=jQuery(this),
 					label=_this.parent();
-				
+
 				if(_this.is(":checked"))
 				{
 					urlFilters+="&"+(_this.attr("rel")||"");
 					// Adicionando classe ao label
 					label.addClass("sr_selected");
 				}
-				
+
 				fns.adjustText(_this);
 				// Add span vazio (depois de executar de "adjustText")
 				label.append('<span class="sr_box"></span><span class="sr_box2"></span>');
-				
+
 				_this.bind("change",function(){
 					fns.inputAction();
 					if(_this.is(":checked"))
@@ -251,14 +251,14 @@ jQuery.fn.vtexSmartResearch=function(opts)
 					ajaxCallbackObj.filters=$this.filter(":checked").length;
 				});
 			});
-			
+
 			if(""!==urlFilters)
 				fns.addFilter($empty);
 		},
 		mergeMenu:function()
 		{
 			if(!options.mergeMenu) return false;
-			
+
 			var elem=departamentE;
 			elem.insertAfter(options.insertMenuAfter);
 			fns.departamentMenuFormat(elem);
@@ -281,50 +281,50 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			});
 		},
 		fieldsetFormat:function()
-		{	
+		{
 			labelCallbackData.fieldsetCount=0;
 			labelCallbackData.tmpCurrentLabel={};
-			
+
 			filtersMenuE.find("fieldset").each(function(){
 				var $t=jQuery(this),
 					label=$t.find("label"),
 					fieldsetClass="filtro_"+($t.find("h5:first").text()||"").toLowerCase().replaceSpecialChars().replace(/\s/g,"-");
-				
+
 				labelCallbackData[fieldsetClass]={};
-				
+
 				// Ocultar fieldset quando não existe filtro e sair desste método
 				if(label.length<1)
 				{
 					$t.hide();
 					return;
 				}
-				
+
 				// Adicionar classe ao fieldset
 				$t.addClass(fieldsetClass);
-				
+
 				// Adicionando classe e título ao label
 				label.each(function(ndx){
 					var t=jQuery(this),
 						v=(t.find("input").val()||""),
 						labelClass="sr_"+v.toLowerCase().replaceSpecialChars().replace(/\s/g,"-");
-						
+
 					labelCallbackData.tmpCurrentLabel=
 					{
 						fieldsetParent:[$t,fieldsetClass],
 						elem:t
 					};
-						
+
 					labelCallbackData[fieldsetClass][ndx.toString()]=
 					{
 						className:labelClass,
 						title:v
 					};
-						
+
 					t.addClass(labelClass).attr({"title":v,"index":ndx});
-					
+
 					options.labelCallback(labelCallbackData);
 				});
-				
+
 				labelCallbackData.fieldsetCount++;
 			});
 		},
@@ -354,7 +354,7 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			prodOverlay.fadeTo(300,0.6);
 			if(url!=="")
 				urlFilters=urlFilters.replace("&"+url,"");
-			
+
 			currentSearchUrl=fn.getUrl();
 			shelfJqxhr=jQuery.ajax({
 				url:currentSearchUrl,
@@ -383,20 +383,20 @@ jQuery.fn.vtexSmartResearch=function(opts)
 		{
 			animatingFilter=true;
 			if(!options.authorizeUpdate(ajaxCallbackObj)) return false;
-			
+
 			var shelf=$data.filter(options.shelfClass);
 			var shelfPage=loadContentE.find(options.shelfClass);
-			
+
 			(shelfPage.length>0?shelfPage:options.emptySearchElem).slideUp(600,function(){
 				jQuery(this).remove();
-				
+
 				// Removendo a mensagem de busca vazia, esta remoção "forçada" foi feita para
 				// corrigir um bug encontrado ao clicar em vários filtros
 				if(options.usePopup)
 					body.find(".boxPopUp2").vtexPopUp2();
 				else
 					options.emptySearchElem.remove();
-					
+
 				if(shelf.length>0)
 				{
 					shelf.hide();
@@ -408,9 +408,9 @@ jQuery.fn.vtexSmartResearch=function(opts)
 					ajaxCallbackObj.isEmpty=false;
 				}
 				else
-				{	
+				{
 					ajaxCallbackObj.isEmpty=true;
-					
+
 					if(options.usePopup)
 						options.emptySearchElem.addClass("freeContent autoClose ac_"+options.popupAutoCloseSeconds).vtexPopUp2().stop(true).show();
 					else
@@ -420,7 +420,7 @@ jQuery.fn.vtexSmartResearch=function(opts)
 							options.emptySearchElem.fadeTo(300,1);
 						});
 					}
-					
+
 					options.emptySearchCallback(ajaxCallbackObj);
 				}
 			});
@@ -430,9 +430,9 @@ jQuery.fn.vtexSmartResearch=function(opts)
 			var label=input.parent(),
 				text=label.text();
 				qtt="";
-			
+
 			text=fns.removeCounter(text);
-			
+
 			label.text(text).prepend(input);
 		},
 		removeCounter:function(text)
@@ -456,55 +456,12 @@ jQuery.fn.vtexSmartResearch=function(opts)
 		fns.mergeMenu();
 	else if(body.hasClass("categoria") || body.hasClass("resultado-busca"))
 		fns.mergeMenuList();
-	
+
 	fns.exec();
 	fn.infinitScroll();
 	fn.scrollToTop();
 	options.callback();
-	
+
 	// Exibindo o menu
 	filtersMenuE.css("visibility","visible");
 };
-
-
-$(function(){
-	var opts={
-		emptySearchMsg:'<div class="noFilterResults"><div class="ico-noFilterResults"></div><p>N\u00e3o encontramos produtos que atenda a todos os filtros escolhidos.</p><span>DICA: Use combina\u00e7\u00f5es de filtros diferentes ou seja menos espec\u00edfico nas sele\u00e7\u00f5es.</span></div>',
-		shelfCallback: function() {
-			$(".quickViewLink").vtexPopUp2();
-		}
-	};
-
-	if($("body").hasClass("home"))
-	{
-		$(".menuLeft .search-multiple-navigator input[type='checkbox']").vtexSmartResearch({
-			emptySearchMsg:opts.emptySearchMsg,
-			searchUrl:"/buscapagina?PS=16&sl=ef3fcb99-de72-4251-aa57-71fe5b6e149f &cc=4&sm=0&PageNumber=",
-			loadContent:".search_results",
-			shelfCallback: function() {
-				$(".quickViewLink").vtexPopUp2();
-			},
-			ajaxCallback:function(obj)
-			{
-				if(obj.filters>0 && false===obj.isEmpty)
-				{
-					$(".search_results").removeAttr("style");
-				}
-				else
-				{
-					$(".search_results").css({"position":"absolute","left":"-9999em"}).children().slideUp(600);
-				}
-			},
-			authorizeScroll:function(obj)
-			{
-				return (obj.filters>0)?true:false;
-			},
-			getShelfHeight:function(container)
-			{
-				return (container.offset().top+container.height());
-			}
-		});
-	}
-	else
-		$(".menuLeft .search-multiple-navigator input[type='checkbox']").vtexSmartResearch(opts);
-});
