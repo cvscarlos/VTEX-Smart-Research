@@ -10,7 +10,7 @@
 "function"!==typeof String.prototype.trim&&(String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g,"")});
 jQuery.fn.vtexSmartResearch=function(opts)
 {
-	$this=jQuery(this);
+	var $this=jQuery(this);
 
 	var log=function(msg,type){
 		if(typeof console=="object")
